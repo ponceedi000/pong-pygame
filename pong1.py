@@ -46,14 +46,32 @@ all_sprites.add(paddle1, paddle2, ball)
 
 def redraw():
   window.fill(black)
+  #Title Font
+  font = pygame.font.SysFont('Comic Sans MS', 30)
+  text = font.render('PONG', False, white)
+  textRect = text.get_rect()
+  textRect.center = (750//2, 25)
+  window.blit(text, textRect)
+
+  #Player 1 score
+  p1_score = font.render(str(paddle1.points), False, white)
+  p1Rect = p1_score.get_rect()
+  p1Rect.center = (50, 50)
+  window.blit(p1_score, p1Rect)
+
+  #Player 2 score
+  p2_score = font.render(str(paddle2.points), False, white)
+  p2Rect = p2_score.get_rect()
+  p2Rect.center = (700, 50)
+  window.blit(p2_score, p2Rect)
+
+  
   all_sprites.draw(window)
   pygame.display.update()
 
 
 
-
-
-
+#Game Loop
 run = True
 while run:
   pygame.time.delay(100)
@@ -74,8 +92,34 @@ while run:
   if key[pygame.K_DOWN]:
     paddle2.rect.y += +paddle_speed
 
-  ball.rect.x += ball.speed 
-  ball.rect.y += ball.speed
+  ball.rect.x += ball.speed * ball.dx
+  ball.rect.y += ball.speed * ball.dy
+
+
+  if ball.rect.y > 490:
+    ball.dy = -1
+
+  # Resets ball to middle if it passes through x axis RIGHT wall
+  if ball.rect.x > 740:
+    ball.rect.x, ball.rect.y = 375, 250
+    ball.dx = -1  
+    paddle1.points += 1
+
+  if ball.rect.y < 0:
+    ball.dy = 1
+  # Resets ball to middle if it passes through x axis LEFT wall
+  if ball.rect.x < 10:
+    ball.rect.x, ball.rect.y = 375, 250
+    ball.dx = 1
+    paddle2.points += 1
+
+
+  if paddle1.rect.colliderect(ball.rect):
+    ball.dx = 1
+
+  if paddle2.rect.colliderect(ball.rect):
+    ball.dx = -1
+
 
   redraw()
 
