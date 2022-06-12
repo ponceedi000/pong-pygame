@@ -4,16 +4,17 @@ pygame.init()
 
 window = pygame.display.set_mode((750, 500))
 
-pygame.display.set_caption('Pong Game Title')
-
+pygame.display.set_caption('Pong Game!')
+# Colors to be used in game
 white = (255, 255, 255)
 black = (0, 0, 0)
-
+green = ( 87, 224, 87)
+red = ( 216, 36, 71)
+blue = ( 90, 208, 230)
 class Paddle(pygame.sprite.Sprite):
   def __init__(self):
     pygame.sprite.Sprite.__init__(self)
     self.image = pygame.Surface([10, 75])
-    self.image.fill(white)
     self.rect = self.image.get_rect()
     self.points = 0
 
@@ -23,19 +24,21 @@ class Ball(pygame.sprite.Sprite):
     self.image = pygame.Surface([10, 10])
     self.image.fill(white)
     self.rect = self.image.get_rect()
-    self.speed = 10
+    self.speed = 3
     self.dx = 1
     self.dy = 1
 
 paddle1 = Paddle()
+paddle1.image.fill(blue)
 paddle1.rect.x = 25
 paddle1.rect.y = 225
 
 paddle2 = Paddle()
+paddle2.image.fill(green)
 paddle2.rect.x = 715
 paddle2.rect.y = 225
 
-paddle_speed = 50
+paddle_speed = 10
 
 ball = Ball()
 ball.rect.x = 375
@@ -54,13 +57,13 @@ def redraw():
   window.blit(text, textRect)
 
   #Player 1 score
-  p1_score = font.render(str(paddle1.points), False, white)
+  p1_score = font.render(str(paddle1.points), False, blue)
   p1Rect = p1_score.get_rect()
   p1Rect.center = (50, 50)
   window.blit(p1_score, p1Rect)
 
   #Player 2 score
-  p2_score = font.render(str(paddle2.points), False, white)
+  p2_score = font.render(str(paddle2.points), False, green)
   p2Rect = p2_score.get_rect()
   p2Rect.center = (700, 50)
   window.blit(p2_score, p2Rect)
@@ -69,13 +72,14 @@ def redraw():
   all_sprites.draw(window)
   pygame.display.update()
 
+# The clock will be used to control how fast the screen updates
+clock = pygame.time.Clock()
 
-
-#Game Loop
+#Game Loop 
 run = True
 while run:
-  pygame.time.delay(100)
-
+  # pygame.time.delay(100)
+  clock.tick(60)
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       run = False
